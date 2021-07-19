@@ -81,3 +81,42 @@ order by c_count DESC, c.hacker_id
 
 /* ;) */
 ;
+
+
+SELECT CASE
+	WHEN P IS NULL THEN CONCAT(N, ' Root')
+	WHEN N IN (SELECT DISTINCT P FROM BST) THEN CONCAT(N, ' Inner')
+	ELSE CONCAT(N, ' Leaf')
+	END
+FROM BST
+ORDER BY N ASC;
+
+
+select c.company_code, c.founder, 
+    count(distinct l.lead_manager_code), count(distinct s.senior_manager_code), 
+    count(distinct m.manager_code),count(distinct e.employee_code) 
+from Company c, Lead_Manager l, Senior_Manager s, Manager m, Employee e 
+where c.company_code = l.company_code 
+    and l.lead_manager_code=s.lead_manager_code 
+    and s.senior_manager_code=m.senior_manager_code 
+    and m.manager_code=e.manager_code 
+group by c.company_code order by c.company_code;
+
+
+
+SELECT C.COMPANY_CODE, C.FOUNDER,
+    COUNT(DISTINCT L.LEAD_MANAGER_CODE), COUNT(DISTINCT S.SENIOR_MANAGER_CODE),
+    COUNT(DISTINCT M.MANAGER_CODE), COUNT(DISTINCT E.EMPLOYEE_CODE)
+FROM COMPANY C, LEAD_MANAGER L, SENIOR_MANAGER S, MANAGER M, EMPLOYEE E
+WHERE C.COMPANY_CODE = L.COMPANY_CODE
+    AND L.LEAD_MANAGER_CODE = S.LEAD_MANAGER_CODE
+    AND S.SENIOR_MANAGER_CODE = M.SENIOR_MANAGER_CODE
+    AND M.MANAGER_CODE = E.MANAGER_CODE
+GROUP BY C.COMPANY_CODE, c.FOUNDER
+ORDER BY C.COMPANY_CODE ASC;
+
+
+SELECT IF(GRADE < 8, NULL, NAME), GRADE, MARKS
+FROM STUDENTS JOIN GRADES  --this join without any on condition creates cross-product
+WHERE MARKS BETWEEN MIN_MARK AND MAX_MARK
+ORDER BY GRADE DESC, NAME;
